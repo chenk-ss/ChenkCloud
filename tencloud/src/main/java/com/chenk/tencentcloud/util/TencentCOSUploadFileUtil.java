@@ -41,7 +41,7 @@ public class TencentCOSUploadFileUtil {
             File localFile = File.createTempFile(String.valueOf(System.currentTimeMillis()), substring);
             file.transferTo(localFile);
             Random random = new Random();
-//            fileName = PREFIX + random.nextInt(10000) + System.currentTimeMillis() + substring;
+            fileName = StringUtil.getRandomFileName(fileName);
             // 将 文件上传至 COS
             PutObjectRequest objectRequest = new PutObjectRequest(BUCKET_NAME, fileName, localFile);
             cosClient.putObject(objectRequest);
@@ -50,6 +50,6 @@ public class TencentCOSUploadFileUtil {
         } finally {
             cosClient.shutdown();
         }
-        return URL + fileName;
+        return fileName;
     }
 }
