@@ -30,21 +30,34 @@ public class UploadFileController {
         if (null == file) {
             return "文件为空";
         }
-        String filePath = TencentCOSUploadFileUtil.uploadfile(file);
-        log.info("上传成功，访问地址为:" + TencentCOSUploadFileUtil.URL + filePath);
+        Thread th = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String originFileName = file.getOriginalFilename();
+                log.info("开始上传：{}", originFileName);
+                String filePath = TencentCOSUploadFileUtil.uploadfile(file);
+                log.info("上传成功，访问地址为:" + TencentCOSUploadFileUtil.URL + filePath);
 
-        FileBean fileBean = new FileBean();
-        fileBean.setFileName(filePath);
-        fileBean.setUrl(TencentCOSUploadFileUtil.URL + filePath);
-        Date date = new Date();
-        fileBean.setCreateTime(date);
-        fileBean.setUpdateTime(date);
-        fileBean.setSize(file.getSize());
-        fileBean.setType(filePath.substring(filePath.lastIndexOf(".") + 1, filePath.length()));
-        fileBean.setStatus(1L);
-        fileBean.setRemark(null);
-        fileService.add(fileBean);
-
-        return "上传成功，访问地址为:" + TencentCOSUploadFileUtil.URL + filePath;
+                FileBean fileBean = new FileBean();
+                fileBean.setFileName(filePath);
+                fileBean.setUrl(TencentCOSUploadFileUtil.URL + filePath);
+                Date date = new Date();
+                fileBean.setCreateTime(date);
+                fileBean.setUpdateTime(date);
+                fileBean.setSize(file.getSize());
+                fileBean.setType(filePath.substring(filePath.lastIndexOf(".") + 1, filePath.length()));
+                fileBean.setStatus(1L);
+                fileBean.setRemark(null);
+                fileBean.setOriginFileName(originFileName);
+                fileService.add(fileBean);
+            }
+        });
+        th.start();
+        try {
+            th.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return "上传成功";
     }
 }

@@ -40,4 +40,7 @@ public class FileBean {
 
     @Column(name = "remark")
     private String remark;
+
+    @Column(name = "origin_file_name")
+    private String originFileName;
 }

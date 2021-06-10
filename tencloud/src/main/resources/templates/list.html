@@ -13,7 +13,9 @@
     <tr th:each="entity:${resultList}">
         <p th:text="${entity.getCreateTime()}"></p>
         <p th:text="${entity.getUrl()}"></p>
-        <img th:src="${entity.getUrl()}" width="20%" height="20%"/>
+        <p th:if="${entity.getType() eq 'jpg' || entity.getType() eq 'png' || entity.getType() eq 'gif'}">
+            <img th:src="${entity.getUrl()}" width="20%" height="20%"/>
+        </p>
     </tr>
 </table>
 <script>
