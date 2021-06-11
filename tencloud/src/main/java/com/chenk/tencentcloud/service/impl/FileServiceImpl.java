@@ -1,7 +1,6 @@
 package com.chenk.tencentcloud.service.impl;
 
 import com.chenk.tencentcloud.pojo.FileDBDTO;
-import com.chenk.tencentcloud.pojo.FileDTO;
 import com.chenk.tencentcloud.pojo.bean.FileBean;
 import com.chenk.tencentcloud.repository.FileRepository;
 import com.chenk.tencentcloud.service.FileService;

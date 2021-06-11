@@ -5,7 +5,14 @@
     <title>test</title>
     <script type="text/javascript" src="https://qiniu.taeyeonss.com/cos-js-sdk-v5.min.js"></script>
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
-    <script>var host = "http://localhost:7100"</script>
+    <script>
+        var HOST = "http://localhost:7100";
+        var DOMAIN = "https://xxx.com";
+        var SECRET_ID = "";
+        var SECRET_KEY = "";
+        var BUCKET_NAME = "";
+        var REGION = "ap-nanjing";
+    </script>
 </head>
 <body>
 <input type="button" onclick="queryList()" value="文件列表">
@@ -16,8 +23,8 @@
 <script type="text/javascript">
     //实例化COS对象
     var cos = new COS({
-        SecretId: '', //密钥id
-        SecretKey: ''//密钥的key
+        SecretId: SECRET_ID, //密钥id
+        SecretKey: SECRET_KEY//密钥的key
     });
 
     //点击上传按钮上传文件到腾讯云
@@ -31,12 +38,12 @@
         var postData = {
             'fileName': newName,
             'originFileName': fileName,
-            'url': "https://xxx/"+newName,
+            'url': DOMAIN + '/' + newName,
             'size': size
         };
         cos.putObject({
-                Bucket: '', // 桶名-APPID  必须
-                Region: 'ap-nanjing', //区域 必须
+                Bucket: BUCKET_NAME, // 桶名-APPID  必须
+                Region: REGION, //区域 必须
                 Key: newName, //文件名必须
                 StorageClass: 'STANDARD',
                 Body: file, // 上传文件对象
@@ -49,7 +56,7 @@
                 console.log(err || data);//上传失败的返回值
                 if (data.statusCode === 200 && boo) {
                     $.ajax({
-                        url: host + "/file/insertToDB",
+                        url: HOST + "/insertToDB",
                         type: "post",
                         data: JSON.stringify(postData),
                         contentType: "application/json",
@@ -73,7 +80,7 @@
 
 
     function queryList() {
-        window.location.href = host + '/list?page=0&size=20';
+        window.location.href = HOST + '/list?page=0&size=20';
     }
 </script>
 </body>
