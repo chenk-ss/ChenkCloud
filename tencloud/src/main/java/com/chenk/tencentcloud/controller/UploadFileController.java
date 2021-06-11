@@ -5,10 +5,7 @@ import com.chenk.tencentcloud.service.FileService;
 import com.chenk.tencentcloud.util.TencentCOSUploadFileUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
@@ -24,6 +21,29 @@ public class UploadFileController {
 
     @Autowired
     private FileService fileService;
+
+    @CrossOrigin("*")
+    @ResponseBody
+    @PostMapping("/insertToDB")
+    public String insertToDB(@RequestParam("fileName") String fileName,
+                             @RequestParam("originFileName") String originFileName,
+                             @RequestParam("url") String url,
+                             @RequestParam("size") Long size) {
+        FileBean fileBean = new FileBean();
+        String filePath = fileName;
+        fileBean.setFileName(fileName);
+        fileBean.setUrl(url);
+        Date date = new Date();
+        fileBean.setCreateTime(date);
+        fileBean.setUpdateTime(date);
+        fileBean.setSize(size);
+        fileBean.setType(filePath.substring(filePath.lastIndexOf(".") + 1, filePath.length()));
+        fileBean.setStatus(1L);
+        fileBean.setRemark(null);
+        fileBean.setOriginFileName(originFileName);
+        boolean b = fileService.add(fileBean);
+        return b ? "上传成功" : "上传失败";
+    }
 
     @PostMapping("/upload")
     public String upload(@RequestParam("file") MultipartFile file) {

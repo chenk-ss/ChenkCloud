@@ -1,7 +1,6 @@
 package com.chenk.tencentcloud.controller;
 
 import com.chenk.tencentcloud.service.FileService;
-import com.chenk.tencentcloud.service.impl.FileServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,7 +21,7 @@ public class HomeController {
 
     @GetMapping(value = "/")
     private String index() {
-        return "index";
+        return "web";
     }
 
     @GetMapping("/list")
