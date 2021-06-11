@@ -1,5 +1,6 @@
 package com.chenk.tencentcloud.controller;
 
+import com.chenk.tencentcloud.pojo.FileInsertDTO;
 import com.chenk.tencentcloud.pojo.bean.FileBean;
 import com.chenk.tencentcloud.service.FileService;
 import com.chenk.tencentcloud.util.TencentCOSUploadFileUtil;
@@ -24,23 +25,20 @@ public class UploadFileController {
 
     @CrossOrigin("*")
     @ResponseBody
-    @PostMapping("/insertToDB")
-    public String insertToDB(@RequestParam("fileName") String fileName,
-                             @RequestParam("originFileName") String originFileName,
-                             @RequestParam("url") String url,
-                             @RequestParam("size") Long size) {
+    @RequestMapping(value = "/insertToDB", method = RequestMethod.POST)
+    public String insertToDB(@RequestBody FileInsertDTO dto) {
         FileBean fileBean = new FileBean();
-        String filePath = fileName;
-        fileBean.setFileName(fileName);
-        fileBean.setUrl(url);
+        String filePath = dto.getFileName();
+        fileBean.setFileName(dto.getFileName());
+        fileBean.setUrl(dto.getUrl());
         Date date = new Date();
         fileBean.setCreateTime(date);
         fileBean.setUpdateTime(date);
-        fileBean.setSize(size);
+        fileBean.setSize(dto.getSize());
         fileBean.setType(filePath.substring(filePath.lastIndexOf(".") + 1, filePath.length()));
         fileBean.setStatus(1L);
         fileBean.setRemark(null);
-        fileBean.setOriginFileName(originFileName);
+        fileBean.setOriginFileName(dto.getOriginFileName());
         boolean b = fileService.add(fileBean);
         return b ? "上传成功" : "上传失败";
     }

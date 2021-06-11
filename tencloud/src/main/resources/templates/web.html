@@ -28,7 +28,12 @@
         var fileType = fileName.substring(fileName.lastIndexOf("\.") + 1);
         var newName = new Date().getTime() + '-' + getUuid() + '.' + fileType;
         var boo = false;
-        var postData = 'fileName=' + newName + '&originFileName=' + fileName + '&url=' + newName + '&size=' + size;
+        var postData = {
+            'fileName': newName,
+            'originFileName': fileName,
+            'url': "https://xxx/"+newName,
+            'size': size
+        };
         cos.putObject({
                 Bucket: '', // 桶名-APPID  必须
                 Region: 'ap-nanjing', //区域 必须
@@ -44,9 +49,9 @@
                 console.log(err || data);//上传失败的返回值
                 if (data.statusCode === 200 && boo) {
                     $.ajax({
-                        url: host + "/file/insertToDB?" + postData,
+                        url: host + "/file/insertToDB",
                         type: "post",
-                        // data: postData,
+                        data: JSON.stringify(postData),
                         contentType: "application/json",
                         success: function (res) {
                             console.log(res);
