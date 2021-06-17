@@ -3,15 +3,13 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>test</title>
-    <script type="text/javascript" src="https://qiniu.taeyeonss.com/cos-js-sdk-v5.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/cos-js-sdk-v5/dist/cos-js-sdk-v5.min.js"></script>
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script>
         var HOST = "http://localhost:7100";
-        var DOMAIN = "https://xxx.com";
-        var SECRET_ID = "";
-        var SECRET_KEY = "";
+        var DOMAIN = "";
         var BUCKET_NAME = "";
-        var REGION = "ap-nanjing";
+        var REGION = "";
     </script>
 </head>
 <body>
@@ -21,10 +19,28 @@
 <br/><br/>
 <input type="button" value="上传" onclick="uploadCos()">
 <script type="text/javascript">
-    //实例化COS对象
     var cos = new COS({
-        SecretId: SECRET_ID, //密钥id
-        SecretKey: SECRET_KEY//密钥的key
+        getAuthorization: function (options, callback) {
+            var url = HOST + '/cos/token'; // 这里替换成您的服务接口地址
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', url, true);
+            xhr.onload = function (e) {
+                try {
+                    var data = JSON.parse(e.target.responseText);
+                    var credentials = data.credentials;
+                } catch (e) {
+                }
+                if (!data || !credentials) return console.error('credentials invalid');
+                callback({
+                    TmpSecretId: credentials.tmpSecretId,
+                    TmpSecretKey: credentials.tmpSecretKey,
+                    XCosSecurityToken: credentials.sessionToken,
+                    StartTime: data.startTime, // 时间戳，单位秒，如：1580000000，建议返回服务器时间作为签名的开始时间，避免用户浏览器本地时间偏差过大导致签名错误
+                    ExpiredTime: data.expiredTime, // 时间戳，单位秒，如：1580000900
+                });
+            };
+            xhr.send();
+        }
     });
 
     //点击上传按钮上传文件到腾讯云

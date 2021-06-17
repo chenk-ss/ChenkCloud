@@ -43,4 +43,7 @@ public class FileBean {
 
     @Column(name = "origin_file_name")
     private String originFileName;
+
+    @Column(name = "source")
+    private String source;
 }

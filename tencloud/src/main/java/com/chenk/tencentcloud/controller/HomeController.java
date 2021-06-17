@@ -47,6 +47,7 @@ public class HomeController {
         fileBean.setType(filePath.substring(filePath.lastIndexOf(".") + 1, filePath.length()));
         fileBean.setStatus(1L);
         fileBean.setRemark(null);
+        fileBean.setSource("public");
         fileBean.setOriginFileName(dto.getOriginFileName());
         boolean b = fileService.add(fileBean);
         return b ? "上传成功" : "上传失败";

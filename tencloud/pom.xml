@@ -54,6 +54,11 @@
             <artifactId>commons-lang3</artifactId>
             <version>${apache.lang.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.tencent.cloud</groupId>
+            <artifactId>cos-sts-java</artifactId>
+            <version>3.0.8</version>
+        </dependency>
     </dependencies>
 
     <build>

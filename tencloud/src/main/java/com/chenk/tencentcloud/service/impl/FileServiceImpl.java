@@ -6,10 +6,7 @@ import com.chenk.tencentcloud.repository.FileRepository;
 import com.chenk.tencentcloud.service.FileService;
 import com.chenk.tencentcloud.util.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -28,7 +25,10 @@ public class FileServiceImpl implements FileService {
     @Override
     public List<FileDBDTO> listFromDB(int pageNum, int size) {
         Pageable page = PageRequest.of(pageNum, size, Sort.by("createTime").descending());
-        Page<FileBean> fileBeans = fileRepository.findAll(page);
+        FileBean queryFileBean = new FileBean();
+        queryFileBean.setSource("public");
+        Example<FileBean> example = Example.of(queryFileBean);
+        Page<FileBean> fileBeans = fileRepository.findAll(example, page);
         List<FileDBDTO> fileDTOList = new ArrayList<>();
         fileBeans.stream().forEach(fileBean -> {
             FileDBDTO fileDTO = new FileDBDTO();
