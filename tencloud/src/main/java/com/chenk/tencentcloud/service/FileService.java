@@ -15,4 +15,6 @@ public interface FileService {
     ResultPage<List<FileDBDTO>> listFromDB(int page, int size);
 
     Boolean add(FileBean bean);
+
+    Boolean removeByFileName(String fileName);
 }

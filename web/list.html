@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>文件列表</title>
+</head>
+<body>
+<div id="app">
+    <input type="button" @click="upload()" value="上传文件">
+    <br><br>
+    ============================================================<br>
+    <input type="button" v-if="page > 0" @click="lastList()" value="上一页">
+    {{page + 1}}
+    <input type="button" v-if="size == 20" @click="nextList()" value="下一页">
+    <br>
+    ============================================================<br>
+    <div v-for="(item,index) in data">
+        <br>
+        {{item.createTime}}<br>
+        {{item.originFileName}}<br>
+        {{item.url}}<br>
+        <img v-if="item.type=='jpg' || item.type=='png' || item.type=='gif'"
+             v-bind:src="item.url+'?imageMogr2/thumbnail/400x'"/><br>
+        <input type="button" @click="confirmRemove(item.fileName)" value="删除"><br>
+        ============================================================
+    </div>
+    <br>
+    ============================================================<br>
+    <input type="button" v-if="page > 0" @click="lastList()" value="上一页">
+    {{page + 1}}
+    <input type="button" v-if="size == 20" @click="nextList()" value="下一页">
+    <br>
+    ============================================================<br>
+</div>
+<script type="text/javascript" src="js/vue.min.js"></script>
+<script src="js/jquery.js"></script>
+<script src="js/cos-js-sdk-v5.min.js"></script>
+<script src="js/common.js"></script>
+<script src="js/list.js"></script>
+</body>
+</html>

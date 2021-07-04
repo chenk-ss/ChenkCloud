@@ -54,7 +54,8 @@ public class CosController {
                     "name/cos:ListMultipartUploads",
                     "name/cos:ListParts",
                     "name/cos:UploadPart",
-                    "name/cos:CompleteMultipartUpload"
+                    "name/cos:CompleteMultipartUpload",
+                    "name/cos:DeleteObject"
             };
             config.put("allowActions", allowActions);
 

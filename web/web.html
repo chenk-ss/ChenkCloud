@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>上传文件</title>
+</head>
+<body>
+<div id="app">
+    <input type="button" @click="queryList()" value="文件列表">
+    <br/><br/>
+    <input type="file" name="text" id="uploadFile">
+    <br/><br/>
+    <input type="button" value="上传" @click="uploadCos()">
+</div>
+<script type="text/javascript" src="js/vue.min.js"></script>
+<script src="js/jquery.js"></script>
+<script src="js/cos-js-sdk-v5.min.js"></script>
+<script src="js/common.js"></script>
+<script src="js/web.js"></script>
+</body>
+</html>

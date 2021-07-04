@@ -1,22 +1,26 @@
 package com.chenk.tencentcloud.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.chenk.tencentcloud.pojo.FileDBDTO;
 import com.chenk.tencentcloud.pojo.ResultPage;
 import com.chenk.tencentcloud.pojo.bean.FileBean;
 import com.chenk.tencentcloud.repository.FileRepository;
 import com.chenk.tencentcloud.service.FileService;
 import com.chenk.tencentcloud.util.TimeUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author: chenke
  * @since: 2021/5/31
  */
+@Slf4j
 @Service
 public class FileServiceImpl implements FileService {
 
@@ -55,6 +59,17 @@ public class FileServiceImpl implements FileService {
     @Override
     public Boolean add(FileBean bean) {
         fileRepository.save(bean);
-        return true;
+        return Boolean.TRUE;
+    }
+
+    @Override
+    public Boolean removeByFileName(String fileName) {
+        FileBean bean = new FileBean();
+        bean.setFileName(fileName);
+        Example<FileBean> example = Example.of(bean);
+        Optional<FileBean> one = fileRepository.findOne(example);
+        log.info(JSON.toJSONString(one.get()));
+        fileRepository.deleteById(one.get().getId());
+        return Boolean.TRUE;
     }
 }
