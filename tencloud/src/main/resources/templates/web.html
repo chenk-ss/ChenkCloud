@@ -2,14 +2,13 @@
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>test</title>
+    <title>上传文件</title>
     <script type="text/javascript" src="https://unpkg.com/cos-js-sdk-v5/dist/cos-js-sdk-v5.min.js"></script>
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script>
         var HOST = "http://localhost:7100";
-        var DOMAIN = "";
-        var BUCKET_NAME = "";
-        var REGION = "";
+        var BUCKET_NAME = "taeyeon-1254139325";
+        var REGION = "ap-nanjing";
     </script>
 </head>
 <body>
@@ -54,7 +53,7 @@
         var postData = {
             'fileName': newName,
             'originFileName': fileName,
-            'url': DOMAIN + '/' + newName,
+            'url': newName,
             'size': size
         };
         cos.putObject({

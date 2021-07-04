@@ -1,6 +1,7 @@
 package com.chenk.tencentcloud.service.impl;
 
 import com.chenk.tencentcloud.pojo.FileDBDTO;
+import com.chenk.tencentcloud.pojo.ResultPage;
 import com.chenk.tencentcloud.pojo.bean.FileBean;
 import com.chenk.tencentcloud.repository.FileRepository;
 import com.chenk.tencentcloud.service.FileService;
@@ -23,10 +24,10 @@ public class FileServiceImpl implements FileService {
     private FileRepository fileRepository;
 
     @Override
-    public List<FileDBDTO> listFromDB(int pageNum, int size) {
+    public ResultPage<List<FileDBDTO>> listFromDB(int pageNum, int size) {
         Pageable page = PageRequest.of(pageNum, size, Sort.by("createTime").descending());
         FileBean queryFileBean = new FileBean();
-        queryFileBean.setSource("public");
+//        queryFileBean.setSource("public");
         Example<FileBean> example = Example.of(queryFileBean);
         Page<FileBean> fileBeans = fileRepository.findAll(example, page);
         List<FileDBDTO> fileDTOList = new ArrayList<>();
@@ -41,9 +42,14 @@ public class FileServiceImpl implements FileService {
             fileDTO.setType(fileBean.getType());
             fileDTO.setStatus(fileBean.getStatus());
             fileDTO.setRemark(fileBean.getRemark());
+            fileDTO.setOriginFileName(fileBean.getOriginFileName());
             fileDTOList.add(fileDTO);
         });
-        return fileDTOList;
+        ResultPage<List<FileDBDTO>> resultPage = new ResultPage();
+        resultPage.setData(fileDTOList);
+        resultPage.setPage(pageNum);
+        resultPage.setSize(fileDTOList.size());
+        return resultPage;
     }
 
     @Override

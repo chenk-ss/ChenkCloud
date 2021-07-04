@@ -25,4 +25,6 @@ public class FileDBDTO {
     private Long status;
 
     private String remark;
+
+    private String originFileName;
 }

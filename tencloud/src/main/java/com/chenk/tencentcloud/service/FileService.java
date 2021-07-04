@@ -1,6 +1,7 @@
 package com.chenk.tencentcloud.service;
 
 import com.chenk.tencentcloud.pojo.FileDBDTO;
+import com.chenk.tencentcloud.pojo.ResultPage;
 import com.chenk.tencentcloud.pojo.bean.FileBean;
 
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
  */
 public interface FileService {
 
-    List<FileDBDTO> listFromDB(int page, int size);
+    ResultPage<List<FileDBDTO>> listFromDB(int page, int size);
 
     Boolean add(FileBean bean);
 }
