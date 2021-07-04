@@ -15,6 +15,9 @@ var home = new Vue({
         // 上一页
         lastList: function () {
             var _self = this;
+            if (_self.page <= 0) {
+                return;
+            }
             var pageNum = _self.page - 1;
             _self.queryList(pageNum);
         },
@@ -22,6 +25,9 @@ var home = new Vue({
         // 下一页
         nextList: function () {
             var _self = this;
+            if (_self.size < 20) {
+                return;
+            }
             var pageNum = _self.page + 1;
             _self.queryList(pageNum);
         },
