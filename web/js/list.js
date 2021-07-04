@@ -37,6 +37,15 @@ var home = new Vue({
             });
         },
 
+        copyUrl: function(url) {
+            var input = document.createElement("input");   // js创建一个input输入框
+            input.value = url;  // 将需要复制的文本赋值到创建的input输入框中
+            document.body.appendChild(input);    // 将输入框暂时创建到实例里面
+            input.select();   // 选中输入框中的内容
+            document.execCommand("Copy");   // 执行复制操作
+            document.body.removeChild(input); // 最后删除实例中临时创建的input输入框，完成复制操作
+        },
+
         upload: function () {
             window.location.href = HOST_WEB_HTML;
         },

@@ -9,15 +9,18 @@
     <br><br>
     ============================================================<br>
     <input type="button" v-if="page > 0" @click="lastList()" value="上一页">
-    {{page + 1}}
+    第{{page + 1}}页
     <input type="button" v-if="size == 20" @click="nextList()" value="下一页">
     <br>
     ============================================================<br>
     <div v-for="(item,index) in data">
         <br>
-        {{item.createTime}}<br>
-        {{item.originFileName}}<br>
-        {{item.url}}<br>
+        {{page * size + index + 1}}.
+<!--        {{item.createTime}}<br>-->
+        {{item.originFileName}}&nbsp;&nbsp;&nbsp;&nbsp;<a @click="copyUrl(item.url)" style="color: cadetblue">[复制链接]</a>
+<!--        {{item.url}}-->
+        <br>
+        <br>
         <img v-if="item.type=='jpg' || item.type=='png' || item.type=='gif'"
              v-bind:src="item.url+'?imageMogr2/thumbnail/400x'"/><br>
         <input type="button" @click="confirmRemove(item.fileName)" value="删除"><br>
@@ -26,7 +29,7 @@
     <br>
     ============================================================<br>
     <input type="button" v-if="page > 0" @click="lastList()" value="上一页">
-    {{page + 1}}
+    第{{page + 1}}页
     <input type="button" v-if="size == 20" @click="nextList()" value="下一页">
     <br>
     ============================================================<br>
