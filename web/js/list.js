@@ -9,13 +9,13 @@ var home = new Vue({
     methods: {
         start: function () {
             var _self = this;
-            _self.queryList(0);
+            _self.queryList(1);
         },
 
         // 上一页
         lastList: function () {
             var _self = this;
-            if (_self.page <= 0) {
+            if (_self.page <= 1) {
                 return;
             }
             var pageNum = _self.page - 1;

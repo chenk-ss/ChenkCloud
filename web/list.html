@@ -9,13 +9,13 @@
     <br><br>
     ============================================================<br>
     <input type="button" @click="lastList()" value="上一页">
-    第{{page + 1}}页
+    第{{page}}页
     <input type="button" @click="nextList()" value="下一页">
     <br>
     ============================================================<br>
     <div v-for="(item,index) in data">
         <br>
-        {{page * size + index + 1}}.
+        {{(page - 1) * size + index + 1}}.
         {{item.originFileName}}&nbsp;&nbsp;&nbsp;&nbsp;<a @click="copyUrl(item.url)" style="color: cadetblue">[复制链接]</a>
         <br>
         <br>
@@ -27,7 +27,7 @@
     <br>
     ============================================================<br>
     <input type="button" @click="lastList()" value="上一页">
-    第{{page + 1}}页
+    第{{page}}页
     <input type="button" @click="nextList()" value="下一页">
     <br>
     ============================================================<br>
