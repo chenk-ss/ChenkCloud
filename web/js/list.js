@@ -56,6 +56,10 @@ var home = new Vue({
             window.location.href = HOST_WEB_HTML;
         },
 
+        open: function (url) {
+            window.location.href = url;
+        },
+
         confirmRemove: function (name) {
             var _self = this;
             var msg = "您真的确定要删除吗？\n\n请确认！";

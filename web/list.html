@@ -16,7 +16,9 @@
     <div v-for="(item,index) in data">
         <br>
         {{(page - 1) * size + index + 1}}.
-        {{item.originFileName}}&nbsp;&nbsp;&nbsp;&nbsp;<a @click="copyUrl(item.url)" style="color: cadetblue">[复制链接]</a>
+        {{item.originFileName}}
+        &nbsp;&nbsp;&nbsp;&nbsp;<a @click="copyUrl(item.url)" style="color: cadetblue">[复制链接]</a>
+        &nbsp;&nbsp;&nbsp;&nbsp;<a @click="open(item.url)" target="view_window" style="color: paleturquoise">[新页面打开]</a>
         <br>
         <br>
         <img v-if="item.type=='jpg' || item.type=='png' || item.type=='gif'"
