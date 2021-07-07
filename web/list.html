@@ -18,12 +18,15 @@
         {{(page - 1) * size + index + 1}}.
         {{item.originFileName}}
         &nbsp;&nbsp;&nbsp;&nbsp;<a @click="copyUrl(item.url)" style="color: cadetblue">[复制链接]</a>
-        &nbsp;&nbsp;&nbsp;&nbsp;<a @click="open(item.url)" target="view_window" style="color: paleturquoise">[新页面打开]</a>
+        &nbsp;&nbsp;&nbsp;&nbsp;<a @click="open(item.url)" target="view_window" style="color: pink">[查看源文件]</a>
         <br>
         <br>
-        <img v-if="item.type=='jpg' || item.type=='png' || item.type=='gif'"
+        <img v-if="item.type=='jpg' || item.type=='png' || item.type=='gif' || item.type=='jpeg'"
              v-bind:src="item.url+'?imageMogr2/thumbnail/400x'"/><br>
-        <input type="button" @click="confirmRemove(item.fileName)" value="删除"><br>
+        <audio v-if="item.type=='flac' || item.type=='mp3' || item.type=='wav'"
+             v-bind:src="item.url" controls="controls"></audio>
+        <input type="button" @click="confirmRemove(item.fileName)" value="删除">
+        <br>
         ============================================================
     </div>
     <br>
