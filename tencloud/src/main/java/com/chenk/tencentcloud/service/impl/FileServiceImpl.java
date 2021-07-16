@@ -1,16 +1,17 @@
 package com.chenk.tencentcloud.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chenk.tencentcloud.pojo.FileDBDTO;
-import com.chenk.tencentcloud.pojo.FileDTO;
+import com.chenk.tencentcloud.pojo.ResultPage;
 import com.chenk.tencentcloud.pojo.bean.FileBean;
-import com.chenk.tencentcloud.repository.FileRepository;
+import com.chenk.tencentcloud.mapper.FileMapper;
 import com.chenk.tencentcloud.service.FileService;
 import com.chenk.tencentcloud.util.TimeUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,18 +21,22 @@ import java.util.List;
  * @author: chenke
  * @since: 2021/5/31
  */
+@Slf4j
 @Service
-public class FileServiceImpl implements FileService {
-
-    @Autowired
-    private FileRepository fileRepository;
+public class FileServiceImpl extends ServiceImpl<FileMapper, FileBean> implements FileService {
 
     @Override
-    public List<FileDBDTO> listFromDB(int pageNum, int size) {
-        Pageable page = PageRequest.of(pageNum, size, Sort.by("createTime").descending());
-        Page<FileBean> fileBeans = fileRepository.findAll(page);
+    public ResultPage<List<FileDBDTO>> listFromDB(int pageNum, int size) {
+        LambdaQueryWrapper<FileBean> queryWrapper = new LambdaQueryWrapper();
+        queryWrapper.orderByDesc(FileBean::getCreateTime);
+        IPage<FileBean> page = new Page<>(pageNum, size);
+        page = page(page, queryWrapper);
+        if (null == page
+                || CollectionUtils.isEmpty(page.getRecords())) {
+            return new ResultPage<>();
+        }
         List<FileDBDTO> fileDTOList = new ArrayList<>();
-        fileBeans.stream().forEach(fileBean -> {
+        page.getRecords().stream().forEach(fileBean -> {
             FileDBDTO fileDTO = new FileDBDTO();
             fileDTO.setId(fileBean.getId());
             fileDTO.setFileName(fileBean.getFileName());
@@ -42,14 +47,25 @@ public class FileServiceImpl implements FileService {
             fileDTO.setType(fileBean.getType());
             fileDTO.setStatus(fileBean.getStatus());
             fileDTO.setRemark(fileBean.getRemark());
+            fileDTO.setOriginFileName(fileBean.getOriginFileName());
             fileDTOList.add(fileDTO);
         });
-        return fileDTOList;
+        ResultPage<List<FileDBDTO>> resultPage = new ResultPage();
+        resultPage.setData(fileDTOList);
+        resultPage.setPage(pageNum);
+        resultPage.setSize(fileDTOList.size());
+        return resultPage;
     }
 
     @Override
     public Boolean add(FileBean bean) {
-        fileRepository.save(bean);
-        return true;
+        return save(bean);
+    }
+
+    @Override
+    public Boolean removeByFileName(String fileName) {
+        LambdaQueryWrapper<FileBean> queryWrapper = new LambdaQueryWrapper();
+        queryWrapper.eq(FileBean::getFileName, fileName);
+        return remove(queryWrapper);
     }
 }

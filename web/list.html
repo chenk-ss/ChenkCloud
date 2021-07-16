@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>文件列表</title>
+</head>
+<body>
+<div id="app">
+    <input type="button" @click="upload()" value="上传文件">
+    <br><br>
+    ============================================================<br>
+    <input type="button" @click="lastList()" value="上一页">
+    第{{page}}页
+    <input type="button" @click="nextList()" value="下一页">
+    <br>
+    ============================================================<br>
+    <div v-for="(item,index) in data">
+        <br>
+        {{(page - 1) * size + index + 1}}.
+        {{item.originFileName}}
+        &nbsp;&nbsp;&nbsp;&nbsp;<a @click="copyUrl(item.url)" style="color: cadetblue">[复制链接]</a>
+        &nbsp;&nbsp;&nbsp;&nbsp;<a @click="open(item.url)" target="view_window" style="color: pink">[查看源文件]</a>
+        <br>
+        <br>
+        <img v-if="item.type=='jpg' || item.type=='png' || item.type=='gif' || item.type=='jpeg'"
+             v-bind:src="item.url+'?imageMogr2/thumbnail/400x'"/><br>
+        <audio v-if="item.type=='flac' || item.type=='mp3' || item.type=='wav'"
+             v-bind:src="item.url" controls="controls"></audio>
+        <input type="button" @click="confirmRemove(item.fileName)" value="删除">
+        <br>
+        ============================================================
+    </div>
+    <br>
+    ============================================================<br>
+    <input type="button" @click="lastList()" value="上一页">
+    第{{page}}页
+    <input type="button" @click="nextList()" value="下一页">
+    <br>
+    ============================================================<br>
+</div>
+<script type="text/javascript" src="js/vue.min.js"></script>
+<script src="js/jquery.js"></script>
+<script src="js/cos-js-sdk-v5.min.js"></script>
+<script src="js/common.js"></script>
+<script src="js/list.js"></script>
+</body>
+</html>

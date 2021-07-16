@@ -1,11 +1,9 @@
 server:
-  port: 7100
+  port: 2422
+  servlet:
+    context-path: /file
 
 spring:
-  servlet:
-    multipart:
-      max-file-size: 100MB
-      max-request-size: 100MB
   datasource:
     driverClassName: com.mysql.jdbc.Driver
     url: jdbc:mysql://localhost:3306/tenCOSFile?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false
@@ -20,3 +18,14 @@ spring:
       hibernate:
         show_sql: true
         format_sql: false
+
+mybatis-plus:
+  configuration:
+    auto-mapping-behavior: full
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+  global-config:
+    db-config:
+      logic-delete-value: 0
+      logic-not-delete-value: 1
+  mapper-locations: classpath*:mapper/*Mapper.xml
