@@ -1,15 +1,18 @@
 var home = new Vue({
     el: '#app',
     data: {
-        page: '',
+        page: getPage(),
         dataRead: '',
         data: [],
-        size: 'hello',
+        size: '',
+        total: '',
+        pwd: '',
+        isLogin: getToken() != null && getToken() != '',
     },
     methods: {
         start: function () {
             var _self = this;
-            _self.queryList(1);
+            _self.queryList(_self.page);
         },
 
         // 上一页
@@ -20,16 +23,18 @@ var home = new Vue({
             }
             var pageNum = _self.page - 1;
             _self.queryList(pageNum);
+            sessionStorage.setItem("page", pageNum);
         },
 
         // 下一页
         nextList: function () {
             var _self = this;
-            if (_self.size < 20) {
+            if (_self.size < 20 || _self.total <= _self.page * _self.size) {
                 return;
             }
             var pageNum = _self.page + 1;
             _self.queryList(pageNum);
+            sessionStorage.setItem("page", pageNum);
         },
 
         queryList: function (page) {
@@ -39,6 +44,7 @@ var home = new Vue({
                     _self.page = ret.page;
                     _self.size = ret.size;
                     _self.data = ret.data;
+                    _self.total = ret.total;
                 }
             });
         },
@@ -57,7 +63,7 @@ var home = new Vue({
         },
 
         open: function (url) {
-            window.location.href = url;
+            window.open(url);
         },
 
         confirmRemove: function (name) {
@@ -76,6 +82,10 @@ var home = new Vue({
                 Key: name        /* 必须 */
             }, function (err, data) {
                 console.log(err || data);
+                if (err) {
+                    alert("您无删除权限");
+                    return;
+                }
                 if (data) {
                     getAjax(HOST_LIST_REMOVE + name, null, function (ret, err) {
                         if (ret) {
@@ -84,6 +94,26 @@ var home = new Vue({
                     });
                 }
             });
+        },
+
+        login: function () {
+            var _self = this;
+            console.log(_self.pwd);
+            getAjax(HOST_LOGIN + _self.pwd, null, function (ret, err) {
+                if (ret && ret != null) {
+                    sessionStorage.setItem('token', ret);
+                    _self.queryList(1);
+                    _self.isLogin = true;
+                }
+            });
+        },
+
+        logout: function () {
+            var _self = this;
+            sessionStorage.setItem('token', '');
+            _self.queryList(1);
+            _self.pwd = '';
+            _self.isLogin = false;
         }
     },
     created() {

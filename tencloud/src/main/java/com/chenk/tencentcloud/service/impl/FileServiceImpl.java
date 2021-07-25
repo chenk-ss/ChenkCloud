@@ -11,6 +11,7 @@ import com.chenk.tencentcloud.pojo.bean.FileBean;
 import com.chenk.tencentcloud.mapper.FileMapper;
 import com.chenk.tencentcloud.service.FileService;
 import com.chenk.tencentcloud.util.TimeUtil;
+import com.chenk.tencentcloud.util.TokenUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,9 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FileBean> implement
     public ResultPage<List<FileDBDTO>> listFromDB(int pageNum, int size) {
         LambdaQueryWrapper<FileBean> queryWrapper = new LambdaQueryWrapper();
         queryWrapper.orderByDesc(FileBean::getCreateTime);
+        if (!TokenUtil.isLogin()) {
+            queryWrapper.eq(FileBean::getSource, "public");
+        }
         IPage<FileBean> page = new Page<>(pageNum, size);
         page = page(page, queryWrapper);
         if (null == page
@@ -54,6 +58,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FileBean> implement
         resultPage.setData(fileDTOList);
         resultPage.setPage(pageNum);
         resultPage.setSize(fileDTOList.size());
+        resultPage.setTotal(count(queryWrapper));
         return resultPage;
     }
 

@@ -9,6 +9,10 @@ var home = new Vue({
             var _self = this;
             var file = document.getElementById("uploadFile").files[0];
             var size = file.size;
+            if (size > 100 * 1024 * 1024) {
+                alert("请不要上传大于100M的文件");
+                return;
+            }
             var fileName = file.name;
             var fileType = fileName.substring(fileName.lastIndexOf("\.") + 1);
             var newName = new Date().getTime() + '-' + _self.getUuid() + '.' + fileType;

@@ -11,4 +11,5 @@ public class ResultPage<T> {
     T data;
     Integer size;
     Integer page;
+    Integer total;
 }
