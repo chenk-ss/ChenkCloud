@@ -6,6 +6,7 @@ var HOST_LIST_QUERY = HOST + '/file/list?size=20&page=';
 var HOST_LIST_REMOVE = HOST + '/file/remove?fileName=';
 var HOST_COS_TOKEN = HOST + '/file/cos/token';
 var HOST_DB_INSERT = HOST + "/file/insertToDB"
+var HOST_LOGIN = HOST + "/file/login?pwd="
 
 var BUCKET_NAME = "taeyeon";
 var REGION = "ap-nanjing";
@@ -16,6 +17,7 @@ function postAjax(url, data, callback) {
         data: data,
         type: "POST",
         contentType: "application/json",
+        headers: {Token: getToken()},
         success: function (ret) {
             if (callback) {
                 callback(ret);
@@ -36,6 +38,7 @@ function getAjax(url, data, callback) {
         type: "GET",
         sync: false,
         contentType: "application/json",
+        headers: {Token: getToken()},
         success: function (ret) {
             if (callback) {
                 callback(ret);
@@ -49,26 +52,39 @@ function getAjax(url, data, callback) {
     });
 }
 
+function getToken() {
+    return sessionStorage.getItem("token");
+}
+
+function getPage() {
+    var value = sessionStorage.getItem("page");
+    var regPos = /^[1-9]\d*$/; // 正整数
+    if(regPos.test(value)){
+        return value;
+    }else{
+        return 1;
+    }
+}
+
 var cos = new COS({
     getAuthorization: function (options, callback) {
-        var url = HOST_COS_TOKEN; // 这里替换成您的服务接口地址
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', url, true);
-        xhr.onload = function (e) {
-            try {
-                var data = JSON.parse(e.target.responseText);
-                var credentials = data.credentials;
-            } catch (e) {
+        postAjax(HOST_COS_TOKEN, null, function (ret, err) {
+            if (ret) {
+                var data, credentials;
+                try {
+                    data = JSON.parse(ret);
+                    credentials = data.credentials;
+                } catch (e) {
+                }
+                if (!data || !credentials) return console.error('credentials invalid');
+                callback({
+                    TmpSecretId: credentials.tmpSecretId,
+                    TmpSecretKey: credentials.tmpSecretKey,
+                    XCosSecurityToken: credentials.sessionToken,
+                    StartTime: data.startTime, // 时间戳，单位秒，如：1580000000，建议返回服务器时间作为签名的开始时间，避免用户浏览器本地时间偏差过大导致签名错误
+                    ExpiredTime: data.expiredTime, // 时间戳，单位秒，如：1580000900
+                });
             }
-            if (!data || !credentials) return console.error('credentials invalid');
-            callback({
-                TmpSecretId: credentials.tmpSecretId,
-                TmpSecretKey: credentials.tmpSecretKey,
-                XCosSecurityToken: credentials.sessionToken,
-                StartTime: data.startTime, // 时间戳，单位秒，如：1580000000，建议返回服务器时间作为签名的开始时间，避免用户浏览器本地时间偏差过大导致签名错误
-                ExpiredTime: data.expiredTime, // 时间戳，单位秒，如：1580000900
-            });
-        };
-        xhr.send();
+        });
     }
 });

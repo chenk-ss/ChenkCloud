@@ -1,7 +1,5 @@
 server:
   port: 2422
-  servlet:
-    context-path: /file
 
 spring:
   datasource:
