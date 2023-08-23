@@ -22,6 +22,8 @@ public class CosController {
     String SECRET_KEY = "";
     String BUCKET_NAME = "";
     String REGION = "";
+    JSONObject loginCredential;
+    JSONObject logoutCredential;
 
     @PostMapping("/token")
     public String getToken() {
